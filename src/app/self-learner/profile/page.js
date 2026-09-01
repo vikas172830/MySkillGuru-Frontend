@@ -275,7 +275,7 @@ const UserProfile = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen" style={{ backgroundColor: user?.color }}>
+      <div className="min-h-screen" style={{ backgroundColor: "#0EA5E9" }}>
         <Navbar title="User Profile" />
         <div className="flex flex-1 items-center justify-center p-6 mt-20">
           <Spinner />
@@ -285,7 +285,7 @@ const UserProfile = () => {
   }
 
   return (
-    <div className="flex flex-col min-h-screen" style={{ backgroundColor: user?.color }}>
+    <div className="flex flex-col min-h-screen" style={{ backgroundColor: "#0EA5E9" }}>
       <Navbar title="User Profile" />
 
       <div className="p-6 w-[600px] mx-auto">
@@ -298,10 +298,10 @@ const UserProfile = () => {
                 key={tab}
                 onClick={() => setActiveTab(tab)}
                 className={`flex-1 py-3.5 text-sm font-semibold capitalize transition ${activeTab === tab
-                  ? "bg-orange-50 border-b-2"
+                  ? "bg-white border-b-2"
                   : "text-gray-500 hover:text-gray-700 hover:bg-gray-50"
                   }`}
-                style={activeTab === tab ? { color: user?.color, borderBottomColor: user?.color } : {}}
+                style={activeTab === tab ? { color: "#0EA5E9", borderBottomColor: "#0EA5E9" } : {}}
               >
                 {tab === "profile" ? "👤 Profile" : tab === "edit" ? "✏️ Edit" : tab === "password" ? "🔒 Password" : "🤖 AI Usage"}
               </button>
@@ -505,7 +505,7 @@ const UserProfile = () => {
                   type="submit"
                   disabled={isSubmitting}
                   className="w-full py-2.5 text-white rounded-lg text-sm font-semibold transition disabled:opacity-60"
-                  style={{ backgroundColor: user?.color }}
+                  style={{ backgroundColor: "#0EA5E9" }}
                 >
                   {isSubmitting ? "Saving..." : "Save Changes"}
                 </button>
@@ -618,7 +618,7 @@ const UserProfile = () => {
                     type="submit"
                     disabled={isSubmitting || !Object.values(passwordStrength).every(Boolean)}
                     className="flex-1 py-2.5 text-white rounded-lg text-sm font-semibold transition disabled:opacity-60"
-                    style={{ backgroundColor: user?.color }}
+                    style={{ backgroundColor: "#0EA5E9" }}
                   >
                     {isSubmitting ? "Updating..." : "Change Password"}
                   </button>

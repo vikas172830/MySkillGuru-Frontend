@@ -19,7 +19,7 @@ export default function Navbar({ title,style }) {
   }
 
   return (
-    <header className="text-white p-4 flex justify-between items-center" style={{backgroundColor: user?.color}}>
+    <header className="text-white p-4 flex justify-between items-center" style={{backgroundColor: "#0EA5E9"}}>
       <div className="flex items-center space-x-4">
         {user?.logo_url&&
         <img
@@ -49,13 +49,6 @@ export default function Navbar({ title,style }) {
               <LocaleSwitcher />
             </div>
           )}
-      <img
-        src="/pics/Logo6.png"
-        alt="Logo 2"
-        width={50}
-        height={50}
-        className="h-16 w-auto rounded-xl"
-      />
       </div>
      
     </header>

@@ -186,7 +186,7 @@ export default function TestYourselfList() {
   };
 
   return (
-    <div className="flex flex-col min-h-screen" style={{ backgroundColor: color }}>
+    <div className="flex flex-col min-h-screen" style={{ backgroundColor: "#0EA5E9" }}>
       <div className="flex-1 p-4 sm:p-6">
 
         {/* Header */}

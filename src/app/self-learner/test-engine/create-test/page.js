@@ -451,7 +451,7 @@ function StepSchedule({ form, setField, color }) {
 
 function ModePicker({ color, onSelect }) {
   return (
-    <div className="flex flex-col min-h-screen items-center justify-center p-5" style={{ backgroundColor: color }}>
+    <div className="flex flex-col min-h-screen items-center justify-center p-5" style={{ backgroundColor: "#0EA5E9" }}>
       <div className="bg-white rounded-2xl shadow-xl w-full max-w-2xl overflow-hidden">
         <div className="px-6 pt-6 pb-5 text-center" style={{ borderBottom: "1.5px solid #f3f4f6" }}>
           <h2 className="text-xl font-bold text-gray-900">Create a Test</h2>
@@ -551,7 +551,7 @@ function RoadmapTestWizard({ color, onBack }) {
 
   if (showConfig) {
     return (
-      <div className="flex flex-col min-h-screen items-center justify-center p-5" style={{ backgroundColor: color }}>
+      <div className="flex flex-col min-h-screen items-center justify-center p-5" style={{ backgroundColor: "#0EA5E9" }}>
         <div className="w-full max-w-xl space-y-3">
           <button
             type="button"
@@ -567,7 +567,7 @@ function RoadmapTestWizard({ color, onBack }) {
   }
 
   return (
-    <div className="flex flex-col min-h-screen items-center justify-center p-5" style={{ backgroundColor: color }}>
+    <div className="flex flex-col min-h-screen items-center justify-center p-5" style={{ backgroundColor: "#0EA5E9" }}>
       <div className="w-full max-w-xl">
         <div className="bg-white rounded-2xl shadow-xl overflow-hidden">
           <div className="px-6 pt-6 pb-5" style={{ borderBottom: "1.5px solid #f3f4f6" }}>
@@ -777,7 +777,7 @@ export default function StudentCreateTest() {
   }
 
   return (
-    <div className="flex flex-col min-h-screen" style={{ backgroundColor: color }}>
+    <div className="flex flex-col min-h-screen" style={{ backgroundColor: "#0EA5E9" }}>
       <div className="flex-1 flex items-start justify-center p-5 pt-8">
         <div className="w-full max-w-xl">
 

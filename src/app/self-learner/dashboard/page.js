@@ -206,18 +206,18 @@ export default function Page() {
             {/* Stats row */}
             <div style={{ display: "grid", gridTemplateColumns: "repeat(4,1fr)", gap: 14 }}>
               {[
-                { label: "Study Hours Today", value: `${totalHours}h`, icon: "⏱️", color: "#6C63FF", bg: "#F0EEFF", prog: studyPercent },
-                { label: "Tasks Done", value: `${doneTasks}/${totalTasks}`, icon: "✅", color: "#43C6AC", bg: "#EDFAF5", prog: taskPercent },
-                { label: "Study Streak", value: "12 Days", icon: "🔥", color: "#FF6584", bg: "#FFF0F3", prog: 60 },
-                { label: "Weekly Goal", value: "68%", icon: "🎯", color: "#F7971E", bg: "#FFF8EE", prog: 68 },
-              ].map(({ label, value, icon, color, bg, prog }) => (
+                { label: "Study Hours Today", value: `${totalHours}h`, icon: "⏱️", color: "#6C63FF", prog: studyPercent },
+                { label: "Tasks Done", value: `${doneTasks}/${totalTasks}`, icon: "✅", color: "#43C6AC", prog: taskPercent },
+                { label: "Study Streak", value: "12 Days", icon: "🔥", color: "#FF6584", prog: 60 },
+                { label: "Weekly Goal", value: "68%", icon: "🎯", color: "#F7971E", prog: 68 },
+              ].map(({ label, value, icon, color, prog }) => (
                 <div key={label} style={{
                   background: "#fff", borderRadius: 18, padding: "18px 16px",
                   border: "1.5px solid #E8ECF4",
                   boxShadow: "0 2px 12px rgba(30,27,75,0.05)",
                 }}>
                   <div style={{
-                    width: 42, height: 42, borderRadius: 12, background: bg,
+                    width: 42, height: 42, borderRadius: 12, background: "rgba(0,0,0,0.06)",
                     display: "flex", alignItems: "center", justifyContent: "center",
                     fontSize: 20, marginBottom: 10,
                   }}>{icon}</div>
@@ -297,8 +297,8 @@ export default function Page() {
                   <h3 style={{ fontWeight: 900, fontSize: 15, color: "#1E1B4B", margin: 0 }}>Study hours</h3>
                   <div style={{
                     display: "flex", alignItems: "center", gap: 4,
-                    background: "#FFF8EE", border: "1px solid #F7971E22",
-                    borderRadius: 20, padding: "4px 10px", fontSize: 11, fontWeight: 700, color: "#F7971E",
+                    background: "#fff", border: "1px solid #E8ECF4",
+                    borderRadius: 20, padding: "4px 10px", fontSize: 11, fontWeight: 700, color: "#0EA5E9",
                   }}>Today ▾</div>
                 </div>
                 <div style={{ display: "flex", justifyContent: "center", alignItems: "center", marginBottom: 16 }}>
@@ -362,7 +362,7 @@ export default function Page() {
             ) : (
               <button
                 onClick={() => router.push("/self-learner/roadmap/create")}
-                style={{ background: "#1E1B4B", border: "none", borderRadius: 10, padding: "6px 14px", fontSize: 11, fontWeight: 800, color: "#fff", cursor: "pointer" }}
+                style={{ background: "#0EA5E9", border: "none", borderRadius: 10, padding: "6px 14px", fontSize: 11, fontWeight: 800, color: "#fff", cursor: "pointer" }}
               >
                 Create Path
               </button>
@@ -409,7 +409,7 @@ export default function Page() {
             {activeRoadmap && currentWeekCard.week && (
               <button
                 onClick={() => router.push(`/self-learner/learning-lounge?roadmapId=${activeRoadmap._id}&week=${currentWeekCard.week}`)}
-                style={{ background: "#1E1B4B", border: "none", borderRadius: 10, padding: "10px 16px", fontSize: 11, fontWeight: 800, color: "#fff", cursor: "pointer" }}
+                style={{ background: "#0EA5E9", border: "none", borderRadius: 10, padding: "10px 16px", fontSize: 11, fontWeight: 800, color: "#fff", cursor: "pointer" }}
               >
                 Go to Learning Lounge →
               </button>
@@ -503,8 +503,8 @@ export default function Page() {
                       width: 30, height: 30, borderRadius: "50%",
                       display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto",
                       cursor: "pointer",
-                      background: isToday ? "#6C63FF" : "transparent",
-                      color: isToday ? "#fff" : studied ? "#6C63FF" : "#1E1B4B",
+                      background: isToday ? "#0EA5E9" : "transparent",
+                      color: isToday ? "#fff" : studied ? "#0EA5E9" : "#1E1B4B",
                       position: "relative",
                     }}>
                       {day}
@@ -513,7 +513,7 @@ export default function Page() {
                           position: "absolute", bottom: 2, left: "50%",
                           transform: "translateX(-50%)",
                           width: 4, height: 4, borderRadius: "50%",
-                          background: "#6C63FF",
+                          background: "#0EA5E9",
                         }} />
                       )}
                     </div>
@@ -522,10 +522,10 @@ export default function Page() {
               </div>
               <div style={{ display: "flex", gap: 16, marginTop: 12 }}>
                 <div style={{ display: "flex", alignItems: "center", gap: 6, fontSize: 11, color: "#7C8DB5", fontWeight: 600 }}>
-                  <span style={{ width: 8, height: 8, borderRadius: "50%", background: "#6C63FF", display: "inline-block" }} /> Studied 
+                  <span style={{ width: 8, height: 8, borderRadius: "50%", background: "#0EA5E9", display: "inline-block" }} /> Studied
                 </div>
                 <div style={{ display: "flex", alignItems: "center", gap: 6, fontSize: 11, color: "#7C8DB5", fontWeight: 600 }}>
-                  <span style={{ width: 8, height: 8, borderRadius: "50%", background: "rgba(108,99,255,0.3)", display: "inline-block" }} /> Today
+                  <span style={{ width: 8, height: 8, borderRadius: "50%", background: "rgba(14,165,233,0.3)", display: "inline-block" }} /> Today
                 </div>
               </div>
             </div>
@@ -571,7 +571,7 @@ export default function Page() {
                   }}
                 />
                 <button onClick={addTodo} style={{
-                  background: "#6C63FF", color: "#fff", border: "none",
+                  background: "#0EA5E9", color: "#fff", border: "none",
                   borderRadius: 10, padding: "8px 14px",
                   fontWeight: 900, fontSize: 18, cursor: "pointer",
                 }}>+</button>

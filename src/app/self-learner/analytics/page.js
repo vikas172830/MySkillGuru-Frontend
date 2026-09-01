@@ -349,7 +349,10 @@ function AttemptRow({ attempt, color, onReview, onDetailedFeedback }) {
 export default function Analytics() {
   const { user } = useContext(AuthContext);
   const router = useRouter();
-  const color = user?.color || "#9b1b30";
+  // Fixed self-learner brand blue (matches the sidebar) instead of the
+  // customizable per-user `user.color` institute/faculty pages use — this
+  // page lives entirely under /self-learner, so no role check is needed.
+  const color = "#0EA5E9";
 
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState(null);

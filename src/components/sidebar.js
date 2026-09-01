@@ -38,17 +38,25 @@ function darkenColor(hex = "#ff7f10", amount = 0.35) {
   return `rgb(${r}, ${g}, ${b})`;
 }
 
+// MySkillGuru's self-learner section keeps its own fixed brand color
+// (matching the public myskillguru marketing pages' SKY palette) instead of
+// the per-user customizable `user.color` institute/faculty/admin sidebars
+// use — same reasoning as Logo below already using a distinct self-learner
+// logo image.
+const SELF_LEARNER_SIDEBAR_COLOR = "#0EA5E9";
+
 export function SidebarDemo({ children }) {
   const { user, loading } = useContext(AuthContext);
   const pathname = usePathname();
   const isExamPage =
     pathname.includes("/mocktest/test-yourself/");
+  const isSelfLearner = pathname?.startsWith("/self-learner");
   const router = useRouter();
   const t = useTranslations("sidebar");
   const [open, setOpen] = useState(true);
   const [openDropdown, setOpenDropdown] = useState(null);
 
-  const color = user?.color || "#ff7f10";
+  const color = isSelfLearner ? SELF_LEARNER_SIDEBAR_COLOR : (user?.color || "#ff7f10");
   const role = user?.role;
   const PROFILE_ROUTES = {
     [ROLES.SUPER_ADMIN]: "/super-admin/profile",
@@ -113,7 +121,7 @@ export function SidebarDemo({ children }) {
               <Logo
                 open={open}
                 toggleSidebar={() => setOpen(!open)}
-                isSelfLearner={pathname?.startsWith("/self-learner")}
+                isSelfLearner={isSelfLearner}
               />
             </div>
 
