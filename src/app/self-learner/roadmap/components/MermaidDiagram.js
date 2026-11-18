@@ -46,6 +46,16 @@ export default function MermaidDiagram({ diagram, onError }) {
       try {
         const mermaidModule = await import("mermaid");
         const mermaid = mermaidModule.default;
+        // securityLevel: "strict" is Mermaid's own XSS sanitiser — it strips
+        // <script>, disables click bindings and event handlers, and escapes
+        // label text. That is the sanitisation for the SVG that goes into
+        // dangerouslySetInnerHTML below.
+        //
+        // A prior extra DOMPurify.sanitize() pass was removed: its svg-only
+        // profile also dropped <foreignObject>, which Mermaid uses to hold
+        // node label text, so diagrams rendered as empty boxes. If you want
+        // that belt-and-braces layer back, add `flowchart: { htmlLabels:
+        // false }` here first so labels become native <text> that survives it.
         mermaid.initialize({ startOnLoad: false, theme: "neutral", securityLevel: "strict" });
         const { svg: renderedSvg } = await mermaid.render(renderId, diagram);
         if (!cancelled) {
@@ -80,11 +90,11 @@ export default function MermaidDiagram({ diagram, onError }) {
       <button
         type="button"
         onClick={() => setFullscreen(true)}
-        className="group relative w-full bg-white border border-gray-100 rounded-2xl p-4 overflow-x-auto [&_svg]:mx-auto cursor-zoom-in text-left"
+        className="group relative w-full bg-white border border-[#E2E8F0] rounded-xl p-5 overflow-x-auto [&_svg]:mx-auto cursor-zoom-in text-left"
         title="Click to view full screen"
       >
         <div dangerouslySetInnerHTML={{ __html: svg }} />
-        <div className="absolute top-2 right-2 bg-white/90 border border-gray-100 rounded-lg p-1.5 opacity-0 group-hover:opacity-100 transition-opacity">
+        <div className="absolute top-3 right-3 w-8 h-8 flex items-center justify-center bg-white/90 border border-[#E2E8F0] rounded-lg opacity-0 group-hover:opacity-100 transition-opacity">
           <Maximize2 size={14} className="text-gray-500" />
         </div>
       </button>

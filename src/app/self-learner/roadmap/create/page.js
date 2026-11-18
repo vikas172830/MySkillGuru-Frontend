@@ -13,30 +13,34 @@ import RoadmapHeader from "../components/RoadmapHeader";
 import RoadmapGeneratorForm from "../components/RoadmapGeneratorForm";
 import SkillAssessmentModal from "../components/SkillAssessmentModal";
 import AssessmentResultCard from "../components/AssessmentResultCard";
-
-const POLL_INTERVAL = 2500;
+import { nextPollDelay } from "@/lib/pollBackoff";
 
 // Shared polling loop for any { job_id } background job that exposes a
 // { status: "processing"|"done"|"error", step? } status endpoint — used for
-// both course-material upload and roadmap creation.
+// both course-material upload and roadmap creation. The delay between polls
+// backs off exponentially (Phase 5.2) so a long roadmap generation doesn't
+// hammer the backend.
 function pollJob(fetchStatus, jobId, onStep) {
   return new Promise((resolve, reject) => {
-    const interval = setInterval(async () => {
+    let delay = 0;
+    const tick = async () => {
       try {
         const status = await fetchStatus(jobId);
         if (status.step) onStep(status.step);
         if (status.status === "done") {
-          clearInterval(interval);
           resolve(status);
         } else if (status.status === "error") {
-          clearInterval(interval);
           reject(new Error(status.error || "Processing failed. Please try again."));
+        } else {
+          delay = nextPollDelay(delay);
+          setTimeout(tick, delay);
         }
       } catch (pollErr) {
-        clearInterval(interval);
         reject(pollErr);
       }
-    }, POLL_INTERVAL);
+    };
+    delay = nextPollDelay(delay);
+    setTimeout(tick, delay);
   });
 }
 
@@ -117,10 +121,21 @@ export default function CreateRoadmapPage() {
 
       if (fileToUpload) {
         setGeneratingStep("Uploading document…");
-        const { job_id: uploadJobId } = await uploadCourseMaterial(fileToUpload, payload.subject);
-        const uploadResult = await pollJob(getCourseMaterialUploadStatus, uploadJobId, setGeneratingStep);
-        setDocId(uploadResult.doc_id);
-        finalPayload = { ...payload, doc_id: uploadResult.doc_id };
+        try {
+          const { job_id: uploadJobId } = await uploadCourseMaterial(fileToUpload, payload.subject);
+          const uploadResult = await pollJob(getCourseMaterialUploadStatus, uploadJobId, setGeneratingStep);
+          setDocId(uploadResult.doc_id);
+          finalPayload = { ...payload, doc_id: uploadResult.doc_id };
+        } catch (uploadErr) {
+          // Grounding is a best-effort enhancement, not a prerequisite —
+          // every other AI call site in this app (notes, Auto Test, practice
+          // questions) already falls back to ungrounded generation when the
+          // vector store or a document lookup is unavailable. Course-material
+          // upload failing (e.g. Qdrant unreachable) shouldn't block roadmap
+          // creation itself; just proceed without grounding.
+          console.warn("Course material upload/indexing failed — continuing without grounding", uploadErr);
+          setGeneratingStep("Course material unavailable — generating without it…");
+        }
       }
 
       setGeneratingStep("Generating curriculum with AI…");
@@ -170,10 +185,10 @@ export default function CreateRoadmapPage() {
 
         {/* ── AI Generating Spinner ── */}
         {step === "generating" && (
-          <div className="bg-white rounded-3xl border border-gray-200 shadow-md p-10 flex flex-col items-center gap-5 text-center">
+          <div className="bg-white rounded-2xl border border-[#E2E8F0] shadow-md p-10 flex flex-col items-center gap-5 text-center">
             <Loader2 size={48} className="animate-spin text-[#6C63FF]" />
             <div>
-              <h3 className="text-lg font-black text-[#1E1B4B]">
+              <h3 className="text-lg font-black text-[#161F4C]">
                 Building Your Learning Path…
               </h3>
               <p className="text-xs text-gray-500 font-semibold mt-2 leading-relaxed max-w-sm">
