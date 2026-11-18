@@ -30,6 +30,8 @@ import {
   IconFileAnalytics,
   IconSchool,
   IconChecklist,
+  IconApps,
+  IconCode,
   IconVideo,
   IconMessage,
   IconBulb,
@@ -465,6 +467,24 @@ export const getSidebarLinks = (role, user, t) => {
               label: "Evaluate Yourself",
               href: "/self-learner/test-engine/test-yourself",
               icon: <IconClipboardCheck />,
+            },
+          ],
+        },
+
+        {
+          label: "Tools",
+          icon: <IconApps />,
+          defaultHref: "/self-learner/tools",
+          children: [
+            {
+              label: "Code Lab",
+              href: "/self-learner/code-lab",
+              icon: <IconCode />,
+            },
+            {
+              label: "All Tools",
+              href: "/self-learner/tools",
+              icon: <IconApps />,
             },
           ],
         },

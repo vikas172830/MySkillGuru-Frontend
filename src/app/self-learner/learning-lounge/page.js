@@ -33,6 +33,7 @@ import MermaidDiagram from "../roadmap/components/MermaidDiagram";
 import HandsOnTaskPanel from "../roadmap/components/HandsOnTaskPanel";
 import ResourcesPanel from "../roadmap/components/ResourcesPanel";
 import InteractiveLessonRenderer from "./components/InteractiveLessonRenderer";
+import LessonCodePractice from "./components/LessonCodePractice";
 
 // ─── Read-aloud (browser Web Speech API — no backend/API cost) ───────────────
 
@@ -144,7 +145,7 @@ function DetailedExplanationContent({ explanation }) {
   );
 }
 
-function AINotesDisplay({ notes, isCompleted, onToggleComplete, onDiagramError, lessonStorageKey }) {
+function AINotesDisplay({ notes, subject, isCompleted, onToggleComplete, onDiagramError, lessonStorageKey }) {
   const [compliment, setCompliment] = useState("");
   const { speaking, speak, stop } = useReadAloud();
 
@@ -199,6 +200,9 @@ function AINotesDisplay({ notes, isCompleted, onToggleComplete, onDiagramError, 
         lesson={notes.interactiveLesson}
         storageKey={lessonStorageKey}
       />
+
+      {/* Technology lessons get a runnable Code Lab to practise in */}
+      {notes.interactiveLesson?.domain === "technology" && <LessonCodePractice subject={subject} />}
 
       {/* Detailed Explanation */}
       {notes.detailedExplanation && (
@@ -1074,6 +1078,7 @@ function LearningLoungeContent() {
                     <div className="bg-white rounded-3xl border border-gray-200 shadow-sm p-5">
                       <AINotesDisplay
                         notes={notes}
+                        subject={roadmap.subject}
                         isCompleted={isCompleted}
                         onToggleComplete={handleToggleComplete}
                         onDiagramError={handleDiagramError}
