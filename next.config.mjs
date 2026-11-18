@@ -4,16 +4,35 @@ const withNextIntl = createNextIntlPlugin("./src/i18n/request.js");
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  // Dev server only: Next 16 blocks hot-reload/hydration requests from any origin
+  // other than "localhost", so a page opened via 127.0.0.1 would never become
+  // interactive. No effect on production builds.
+  allowedDevOrigins: ["127.0.0.1", "localhost"],
+
   images: {
-    domains: ["assets.aceternity.com"],
+    remotePatterns: [{ protocol: "https", hostname: "assets.aceternity.com" }],
   },
 
-  eslint: {
-    ignoreDuringBuilds: true,
+  // Next 16 no longer reads an `eslint` key from this file (the old
+  // `ignoreDuringBuilds` was a silent no-op). Lint separately: `npm run lint`.
+
+  async redirects() {
+    return [
+      // This app is MySkillsGuru only; the root URL goes to its landing page
+      // (a real server redirect, so crawlers and bookmarks follow it).
+      { source: "/", destination: "/myskillguru", permanent: false },
+      // The brand is spelled "MySkillsGuru" (with an s) in the logo, so people
+      // will type that. The canonical route stays /myskillguru.
+      { source: "/myskillsguru", destination: "/myskillguru", permanent: false },
+      { source: "/myskillsguru/:path*", destination: "/myskillguru/:path*", permanent: false },
+    ];
   },
 
   async rewrites() {
-    const API_URL = process.env.API_URL || "http://127.0.0.1:5052";
+    // Resolved ONCE at build time and frozen into routes-manifest.json (see
+    // the API_URL env var at build). Default is the MySkillGuru
+    // backend (5051) — NOT the LMS backend (8000/5050).
+    const API_URL = process.env.API_URL || "http://127.0.0.1:5051";
     return [
       // Exact base path: /:path* does not match zero segments in Next.js,
       // so GET /api/self-learner/roadmap and POST /api/self-learner/roadmap
@@ -22,7 +41,7 @@ const nextConfig = {
         source: "/api/self-learner/roadmap",
         destination: `${API_URL}/api/self-learner/roadmap`,
       },
-      // Sub-paths: preserves /api prefix so Flask blueprint (/api/self-learner/roadmap) matches.
+      // Sub-paths: preserves the /api prefix, which this router is mounted under.
       {
         source: "/api/self-learner/roadmap/:path*",
         destination: `${API_URL}/api/self-learner/roadmap/:path*`,
@@ -47,13 +66,10 @@ const nextConfig = {
         source: "/api/ai-tutor/:path*",
         destination: `${API_URL}/api/ai-tutor/:path*`,
       },
-      // All other API calls: strips /api prefix — non-roadmap Flask routes have no /api prefix.
+      // All other API calls: strips the /api prefix — these routers mount at root.
       {
         source: "/api/:path*",
-        destination: `${process.env.API_URL || "http://localhost:5050/"}/:path*`,
-        // destination: `${process.env.API_URL || "http://103.192.198.186:5050/"}/:path*`,
         destination: `${API_URL}/:path*`,
-
       },
     ];
   },

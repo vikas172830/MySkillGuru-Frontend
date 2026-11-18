@@ -1,18 +1,21 @@
 import "../globals.css";
 
 export const metadata = {
-  title: "MySkillGuru",
-  description: "AI-powered personalized learning roadmaps, self-review, and practice tests",
-  icons: {
-    icon: "/pics/Logo5.png",
+  title: "MySkillsGuru — The Personal Learning Assistant",
+  description:
+    "Learn any skill with a plan built just for you: AI week-by-week roadmaps, homework help, AI notes and practice tests.",
+  openGraph: {
+    title: "MySkillsGuru — The Personal Learning Assistant",
+    description:
+      "AI week-by-week roadmaps, homework help, AI notes and practice tests for self-paced learning.",
+    type: "website",
+    images: ["/pics/Logo17.png"],
   },
 };
 
-// Deliberately NOT wrapped in the admin/self-learner ProtectedRoute — the
-// landing, login, and register pages under this route are public by
-// design (an individual arriving here has no session yet). Once logged
-// in, users land on /self-learner/dashboard, which keeps its own existing
-// guard/layout unchanged.
-export default function MySkillGuruLayout({ children }) {
-  return <div className="min-h-screen bg-[#0B0620]">{children}</div>;
+// Public section: the landing, login and register pages under /myskillguru
+// need no session (see PUBLIC_ROUTE_PREFIXES in ProtectedRoute). After login
+// users land on /self-learner/dashboard, which has its own guard and layout.
+export default function MySkillsGuruLayout({ children }) {
+  return <div className="min-h-screen bg-white">{children}</div>;
 }
