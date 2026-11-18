@@ -19,12 +19,11 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
+// Default for every page in this app. The tab icon comes from src/app/icon.svg
+// (Next's file convention), not an `icons` entry here.
 export const metadata = {
-  title: "grAdelytIcs",
-  description: "AI-Powered Evaluation Management System",
-  icons: {
-    icon: "/pics/Logo5.png",
-  },
+  title: "MySkillsGuru",
+  description: "MySkillsGuru — The Personal Learning Assistant",
 };
 
 export default async function RootLayout({ children }) {

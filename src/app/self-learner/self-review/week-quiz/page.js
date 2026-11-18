@@ -340,7 +340,7 @@ function WeekQuizContent() {
       <div className="flex items-center justify-between border-b border-white/10 pb-4">
         <div>
           <span className="text-[10px] font-bold text-[#6C63FF] uppercase tracking-widest block">
-            grAdelytics Exam Portal
+            MySkillsGuru Assessment
           </span>
           <h2 className="text-base font-extrabold mt-0.5">Week {weekNum} Assessment</h2>
         </div>

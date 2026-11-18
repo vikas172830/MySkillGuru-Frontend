@@ -81,6 +81,24 @@ export function SidebarDemo({ children }) {
     localStorage.setItem("sidebarExpanded", JSON.stringify(open));
   }, [open]);
 
+  // ✅ startsWith so /faculty/evaluate-answer-script/some-id still matches
+  const isActive = (href) =>
+    pathname === href || pathname.startsWith(href + "/");
+  const isChildActive = (children) =>
+    children?.some((child) => isActive(child.href));
+
+  // Auto-open dropdown whose child matches current path.
+  // Must stay ABOVE the `if (loading)` early return below: hooks have to run
+  // in the same order on every render (rules-of-hooks).
+  useEffect(() => {
+    links.forEach((link, idx) => {
+      if (link.children && isChildActive(link.children)) {
+        setOpenDropdown(idx);
+      }
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [pathname]);
+
   if (loading) {
     return (
       <div
@@ -91,23 +109,6 @@ export function SidebarDemo({ children }) {
       </div>
     );
   }
-
-
-
-  // ✅ startsWith so /faculty/evaluate-answer-script/some-id still matches
-  const isActive = (href) =>
-    pathname === href || pathname.startsWith(href + "/");
-  const isChildActive = (children) =>
-    children?.some((child) => isActive(child.href));
-
-  // Auto-open dropdown whose child matches current path
-  useEffect(() => {
-    links.forEach((link, idx) => {
-      if (link.children && isChildActive(link.children)) {
-        setOpenDropdown(idx);
-      }
-    });
-  }, [pathname]);
 
   return (
     <div
@@ -121,7 +122,6 @@ export function SidebarDemo({ children }) {
               <Logo
                 open={open}
                 toggleSidebar={() => setOpen(!open)}
-                isSelfLearner={isSelfLearner}
               />
             </div>
 
@@ -309,8 +309,8 @@ export function SidebarDemo({ children }) {
   );
 }
 
-export const Logo = ({ toggleSidebar, open, isSelfLearner }) => {
-  const logoSrc = isSelfLearner ? "/pics/Logo17.png" : "/pics/Logo7.png";
+export const Logo = ({ toggleSidebar, open }) => {
+  const logoSrc = "/pics/Logo17.png";
   return (
     <div className="w-full flex justify-center">
       <button onClick={toggleSidebar} className="w-full py-2">

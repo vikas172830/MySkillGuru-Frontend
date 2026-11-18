@@ -5,15 +5,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { AuthContext } from "../app/AuthContext";
 import { ROLE_ROUTES } from "./constants/roles";
 
-const PUBLIC_ROUTES = [
-  "/",
-  "/pricing",
-  "/get-a-demo",
-  "/contact-us",
-  "/privacy-policy",
-  "/terms-conditions",
-  "/faq",
-];
+const PUBLIC_ROUTES = ["/"];
 
 // Prefix match, not exact — everything under /myskillguru (landing, login,
 // register, and any future page added there) is public by design, unlike
@@ -28,11 +20,14 @@ const ProtectedRoute = ({ children }) => {
 
   const [authorized, setAuthorized] = useState(true);
 
+  const isPublic =
+    PUBLIC_ROUTES.includes(pathname) || PUBLIC_ROUTE_PREFIXES.some((p) => pathname.startsWith(p));
+
   useEffect(() => {
     if (loading) return;
 
     // Public routes
-    if (PUBLIC_ROUTES.includes(pathname) || PUBLIC_ROUTE_PREFIXES.some((p) => pathname.startsWith(p))) {
+    if (isPublic) {
       setAuthorized(true);
       return;
     }
@@ -54,7 +49,14 @@ const ProtectedRoute = ({ children }) => {
     }
 
     setAuthorized(true);
-  }, [user, loading, pathname, router]);
+  }, [user, loading, pathname, router, isPublic]);
+
+  // Public pages never wait on the session check: they render (and are
+  // server-rendered, so crawlers and first paint see real content) straight
+  // away. Only protected pages hold back until we know who the user is.
+  if (isPublic) {
+    return children;
+  }
 
   // Initial auth loading only
   if (loading) {

@@ -4,11 +4,8 @@ import ProtectedRoute from "./protected_routes";
 import { SidebarDemo } from "@/components/sidebar";
 
 export const metadata = {
-  title: "MySkillGuru",
+  title: "MySkillsGuru",
   description: "AI-powered personalized learning roadmaps, self-review, and practice tests",
-  icons: {
-    icon: "/pics/Logo5.png",
-  },
 };
 
 export default function RootLayout({ children}) {
